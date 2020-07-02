@@ -39,7 +39,7 @@ router.post('/signup', (req, res, next) => {
           .then(dbUser => {
             // log the user in by saving it in the session
             req.session.user = dbUser;
-            res.redirect('/profile')
+            res.redirect('/private')
           })
           .catch(err => {
             next(err);
@@ -48,17 +48,6 @@ router.post('/signup', (req, res, next) => {
     })
   })
 
-  // middleware to check if user is logged in
-const loginCheck = () => {
-    return (req, res, next) => {
-      // is the user logged in 
-      if (req.session.user) {
-        next();
-      } else {
-        res.redirect('/login');
-      }
-    }
-  }
 
 
 //________________________________________________________________this will post the login
@@ -89,6 +78,31 @@ const loginCheck = () => {
       }
     })
   });
+
+
+  router.get('/logout', (req, res, next) => {
+    req.session.destroy(err => {
+      if (err) {
+        next(err);
+      }
+      else {
+        res.redirect('/');
+      }
+    })
+  });
+
+
+  //  middleware to check if user is logged in
+// const loginCheck = () => {
+//     return (req, res, next) => {
+//       // is the user logged in 
+//       if (req.session.user) {
+//         next();
+//       } else {
+//         res.redirect('/login');
+//       }
+//     }
+//   }
 
 
   module.exports =router
